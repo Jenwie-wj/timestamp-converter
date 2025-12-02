@@ -1,5 +1,7 @@
-# 修正版 workflow：为出错的 run step 明确指定 shell、打开更严格的调试选项（set -euxo pipefail）
-# 并去掉可能掩盖错误的 `|| true`，方便看到真实报错位置。
+# 修正版 workflow：修正了 YAML 语法（确保缩进与 block scalar 正确），并保持原有逻辑：
+# 1) checkout
+# 2) 在新分支上创建文件并 push（严格模式 set -euxo pipefail）
+# 3) 使用 peter-evans/create-pull-request 打开 PR
 name: Add Timestamp Converter Extension
 
 on:
@@ -18,8 +20,8 @@ jobs:
 
       - name: Create files, commit and push to a new branch
         id: create_and_push
+        shell: bash
         run: |
-          # 开启严格模式并输出命令，便于定位错误
           set -euxo pipefail
 
           git config user.name "github-actions[bot]"
@@ -315,9 +317,7 @@ EOF
           git commit -m "Add timestamp converter Chrome extension (Manifest V3)"
           git push --set-upstream origin "$BRANCH"
 
-          # 导出分支名供后续步骤使用
           echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
-        shell: bash
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
