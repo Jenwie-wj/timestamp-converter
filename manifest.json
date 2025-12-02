@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Timestamp⇄Date Converter",
+  "description": "在可选时区下进行时间戳（秒/毫秒）与年月日相互转换（支持毫秒）",
+  "version": "1.0.0",
+  "action": {
+    "default_title": "时间戳与日期转换器",
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "16": "icons/icon16.svg",
+    "48": "icons/icon48.svg",
+    "128": "icons/icon128.svg"
+  },
+  "permissions": []
+}
