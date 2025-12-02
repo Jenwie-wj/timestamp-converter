@@ -1,11 +1,12 @@
-# 修正版 workflow：修正了 YAML 语法（确保缩进与 block scalar 正确），并保持原有逻辑：
-# 1) checkout
-# 2) 在新分支上创建文件并 push（严格模式 set -euxo pipefail）
-# 3) 使用 peter-evans/create-pull-request 打开 PR
+# 修正版 workflow（已修正 YAML 语法与 permissions）
+# 注意：把此文件直接替换仓库中的 .github/workflows/add-extension.yml，然后在 Actions 页面手动触发 workflow_dispatch。
 name: Add Timestamp Converter Extension
 
 on:
   workflow_dispatch: {}
+
+permissions:
+  contents: write
 
 jobs:
   add-extension:
