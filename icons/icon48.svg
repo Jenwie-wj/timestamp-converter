@@ -1,4 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24">
-  <rect width="24" height="24" rx="4" fill="#0b74de"/>
-  <text x="12" y="16" font-size="10" font-family="Arial" fill="#fff" text-anchor="middle">TS</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" role="img" aria-labelledby="t48">
+  <title id="t48">Timestamp Converter</title>
+  <defs>
+    <linearGradient id="g48" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0b74de"/>
+      <stop offset="1" stop-color="#0a9ee8"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="1.5" y="1.5" width="45" height="45" rx="8" fill="url(#g48)"/>
+
+  <!-- circular arrow -->
+  <g transform="translate(24,24)" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round">
+    <path d="M14 -1 A16 16 0 1 0 -4 -17"/>
+    <path d="M15 -2 L18 1 L12 3 Z" fill="#fff" stroke="none" transform="rotate(18 15 -1)"/>
+  </g>
+
+  <!-- small clock -->
+  <g transform="translate(24,24)">
+    <circle r="9" fill="#fff"/>
+    <circle r="8.2" fill="#f6f8fb"/>
+    <line x1="0" y1="0" x2="0" y2="-4.5" stroke="#0b74de" stroke-width="1.6" stroke-linecap="round"/>
+    <line x1="0" y1="0" x2="4" y2="2" stroke="#0b74de" stroke-width="1.2" stroke-linecap="round"/>
+  </g>
+
+  <!-- TS -->
+  <g transform="translate(36,36)">
+    <rect x="-8" y="-5" width="16" height="10" rx="3" fill="#072b5b"/>
+    <text x="0" y="3.3" text-anchor="middle" font-family="Sans-serif" font-weight="700" font-size="7" fill="#fff">TS</text>
+  </g>
 </svg>

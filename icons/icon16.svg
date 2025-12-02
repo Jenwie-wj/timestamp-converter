@@ -1,4 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
-  <rect width="24" height="24" rx="4" fill="#0b74de"/>
-  <text x="12" y="16" font-size="10" font-family="Arial" fill="#fff" text-anchor="middle">TS</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" role="img" aria-labelledby="t16">
+  <title id="t16">TS</title>
+  <rect x="0.5" y="0.5" width="15" height="15" rx="3" fill="#0b74de"/>
+  <!-- simplified clock + arrow -->
+  <g transform="translate(4,4)" stroke="#fff" stroke-width="1" fill="none" stroke-linecap="round">
+    <circle cx="4" cy="4" r="3.2" fill="#fff"/>
+    <circle cx="4" cy="4" r="2.6" fill="#f6f8fb"/>
+    <line x1="4" y1="4" x2="4" y2="2.4" stroke="#0b74de"/>
+    <line x1="4" y1="4" x2="5.2" y2="4.8" stroke="#0b74de"/>
+    <path d="M9.2 1.4 L10.6 2.8" stroke="#fff" stroke-width="1" />
+  </g>
+  <text x="12" y="12" font-family="Sans-serif" font-size="6" font-weight="700" fill="#fff" text-anchor="end">TS</text>
 </svg>
