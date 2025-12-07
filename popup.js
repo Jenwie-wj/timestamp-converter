@@ -1,5 +1,8 @@
 // Popup script for timestamp <-> date converter (offset-based timezones)
 (function(){
+  // Constants
+  const COPY_FEEDBACK_DURATION_MS = 1200;
+  
   // Utils
   function pad(n, width=2){ return String(n).padStart(width,'0'); }
   function padMs(n){ return String(n).padStart(3,'0'); }
@@ -26,19 +29,21 @@
     return formatDateFromMs(localMs) + ` (UTC${offsetHours>=0?'+':''}${offsetHours})`;
   }
 
-  // date string -> timestamp (s or ms). dateStr formats:
-  // YYYY-MM-DD [HH:mm[:ss[.SSS]]]
-  function dateStringToTs(dateStr, outUnit, offsetHours){
-    // normalize spaces
-    const s = dateStr.trim();
-    const re = /^(\d{4})-(\d{1,2})-(\d{1,2})(?:[ T](\d{1,2}):(\d{1,2})(?::(\d{1,2})(?:\.(\d{1,3}))?)?)?$/;
-    const m = re.exec(s);
-    if(!m) return { ok:false, text:'日期格式不匹配。允许格式：YYYY-MM-DD 或 YYYY-MM-DD HH:mm[:ss[.SSS]]' };
-    const year = Number(m[1]), month = Number(m[2]), day = Number(m[3]);
-    const hour = Number(m[4]||0), minute = Number(m[5]||0), second = Number(m[6]||0), ms = Number((m[7]||'0').padEnd(3,'0'));
-    // Compute UTC ms for that wall-clock time in the given timezone:
-    // UTCms = Date.UTC(year, month-1, day, hour, minute, second, ms) - offsetHours*3600000
-    const utcMs = Date.UTC(year, month-1, day, hour, minute, second, ms) - offsetHours * 3600000;
+  // Convert datetime-local value to timestamp
+  function datetimeLocalToTs(datetimeValue, outUnit, offsetHours){
+    if(!datetimeValue) return { ok:false, text:'请选择日期和时间' };
+    
+    // datetime-local format: YYYY-MM-DDTHH:mm or YYYY-MM-DDTHH:mm:ss
+    // The browser interprets this as local time, so we need to adjust for the desired timezone
+    const date = new Date(datetimeValue);
+    if(isNaN(date.getTime())) return { ok:false, text:'日期格式无效' };
+    
+    // The date is already in local time, we need to convert it to the specified timezone
+    // getTimezoneOffset returns offset from UTC to local in minutes
+    // To get UTC: UTC = local - offset (so we subtract the offset)
+    const localOffsetMs = date.getTimezoneOffset() * 60000;
+    const utcMs = date.getTime() - localOffsetMs - offsetHours * 3600000;
+    
     if(outUnit === 's') return { ok:true, value: Math.floor(utcMs/1000) };
     return { ok:true, value: utcMs };
   }
@@ -55,12 +60,52 @@
   const btnDateToTs = document.getElementById('btn-date-to-ts');
   const dateResult = document.getElementById('date-result');
   const btnCopyTs = document.getElementById('btn-copy-ts');
+  
+  // Real-time timestamp elements
+  const realtimeTsS = document.getElementById('realtime-ts-s');
+  const realtimeTsMs = document.getElementById('realtime-ts-ms');
+  const currentTimeDisplay = document.getElementById('current-time-display');
 
   function getSelectedRadioValue(name){
     const els = document.getElementsByName(name);
     for(const e of els) if(e.checked) return e.value;
     return null;
   }
+
+  // Create formatter once for efficiency
+  const beijingTimeFormatter = new Intl.DateTimeFormat('zh-CN', {
+    timeZone: 'Asia/Shanghai',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
+
+  // Real-time timestamp update function
+  function updateRealtimeTimestamp(){
+    const now = Date.now();
+    const nowSeconds = Math.floor(now / 1000);
+    
+    realtimeTsS.textContent = nowSeconds;
+    realtimeTsMs.textContent = now;
+    
+    // Format current time in Beijing timezone (UTC+8)
+    const parts = beijingTimeFormatter.formatToParts(new Date());
+    const year = parts.find(p => p.type === 'year').value;
+    const month = parts.find(p => p.type === 'month').value;
+    const day = parts.find(p => p.type === 'day').value;
+    const hour = parts.find(p => p.type === 'hour').value;
+    const minute = parts.find(p => p.type === 'minute').value;
+    const second = parts.find(p => p.type === 'second').value;
+    currentTimeDisplay.textContent = `北京时间：${year}-${month}-${day} ${hour}:${minute}:${second}`;
+  }
+
+  // Update realtime timestamp every second
+  updateRealtimeTimestamp();
+  const realtimeInterval = setInterval(updateRealtimeTimestamp, 1000);
 
   btnTsToDate.addEventListener('click', ()=>{
     const val = tsInput.value.trim();
@@ -76,7 +121,7 @@
     let offset = Number(tzOffsetDate.value);
     if(isNaN(offset)) offset = 8;
     const outUnit = getSelectedRadioValue('date-out-unit'); // s or ms
-    const r = dateStringToTs(val, outUnit, offset);
+    const r = datetimeLocalToTs(val, outUnit, offset);
     if(!r.ok){ dateResult.value = r.text; return; }
     dateResult.value = String(r.value) + (outUnit==='s' ? ' (秒)' : ' (毫秒)');
   });
@@ -86,8 +131,8 @@
     if(!txt) return;
     try{
       await navigator.clipboard.writeText(txt);
-      btnCopyDate.textContent = '已复制';
-      setTimeout(()=>btnCopyDate.textContent='复制结果',1200);
+      btnCopyDate.textContent = '✓ 已复制';
+      setTimeout(()=>btnCopyDate.textContent='📋 复制结果', COPY_FEEDBACK_DURATION_MS);
     }catch(e){ alert('复制失败：' + e); }
   });
 
@@ -96,8 +141,8 @@
     if(!txt) return;
     try{
       await navigator.clipboard.writeText(txt);
-      btnCopyTs.textContent = '已复制';
-      setTimeout(()=>btnCopyTs.textContent='复制结果',1200);
+      btnCopyTs.textContent = '✓ 已复制';
+      setTimeout(()=>btnCopyTs.textContent='📋 复制结果', COPY_FEEDBACK_DURATION_MS);
     }catch(e){ alert('复制失败：' + e); }
   });
 
@@ -109,8 +154,14 @@
     if(e.key === 'Enter') btnDateToTs.click();
   });
 
-  // Provide example initial values
-  tsInput.placeholder = '例如：1633072800 或 1633072800123';
-  dateInput.placeholder = '例如：2025-12-02 15:30:45 或 2025-12-02 15:30:45.123';
+  // Set current datetime as default for date input
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = pad(now.getMonth() + 1);
+  const day = pad(now.getDate());
+  const hour = pad(now.getHours());
+  const minute = pad(now.getMinutes());
+  const second = pad(now.getSeconds());
+  dateInput.value = `${year}-${month}-${day}T${hour}:${minute}:${second}`;
 
 })();

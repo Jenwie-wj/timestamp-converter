@@ -8,12 +8,32 @@
 </head>
 <body>
   <div class="container">
-    <h2>时间戳 ⇄ 年月日（可选时区）</h2>
+    <h2>⏰ 时间戳转换器</h2>
+    
+    <!-- Real-time Timestamp Display -->
+    <div class="section realtime-section">
+      <div class="realtime-header">
+        <h3>🕐 当前实时时间戳</h3>
+      </div>
+      <div class="realtime-content">
+        <div class="timestamp-display">
+          <div class="timestamp-item">
+            <span class="timestamp-label">秒（s）</span>
+            <span class="timestamp-value" id="realtime-ts-s">-</span>
+          </div>
+          <div class="timestamp-item">
+            <span class="timestamp-label">毫秒（ms）</span>
+            <span class="timestamp-value" id="realtime-ts-ms">-</span>
+          </div>
+        </div>
+        <div class="current-time-display" id="current-time-display">-</div>
+      </div>
+    </div>
 
     <div class="section">
-      <h3>1) 时间戳 → 日期</h3>
+      <h3>📅 时间戳 → 日期</h3>
       <label>时间戳输入（数字）</label>
-      <input id="ts-input" placeholder="例如：1633072800 或 1633072800123" />
+      <input id="ts-input" type="number" placeholder="例如：1633072800 或 1633072800123" />
       <div class="row">
         <label><input type="radio" name="ts-unit" value="s" checked /> 秒</label>
         <label><input type="radio" name="ts-unit" value="ms" /> 毫秒</label>
@@ -23,8 +43,8 @@
       <input id="tz-offset-ts" type="number" step="0.25" value="8" />
 
       <div class="row">
-        <button id="btn-ts-to-date">转换为日期</button>
-        <button id="btn-copy-date">复制结果</button>
+        <button id="btn-ts-to-date" class="btn-primary">🔄 转换为日期</button>
+        <button id="btn-copy-date" class="btn-secondary">📋 复制结果</button>
       </div>
 
       <label>结果（YYYY-MM-DD HH:mm:ss.SSS）</label>
@@ -34,9 +54,9 @@
     <hr/>
 
     <div class="section">
-      <h3>2) 日期 → 时间戳</h3>
-      <label>日期输入（可只写日期或写到秒/毫秒）</label>
-      <input id="date-input" placeholder="例如：2025-12-02 15:30:45 或 2025-12-02 15:30:45.123" />
+      <h3>🔢 日期 → 时间戳</h3>
+      <label>选择日期和时间</label>
+      <input id="date-input" type="datetime-local" step="1" />
 
       <label>时区偏移（小时，默认 +8）</label>
       <input id="tz-offset-date" type="number" step="0.25" value="8" />
@@ -47,8 +67,8 @@
       </div>
 
       <div class="row">
-        <button id="btn-date-to-ts">转换为时间戳</button>
-        <button id="btn-copy-ts">复制结果</button>
+        <button id="btn-date-to-ts" class="btn-primary">🔄 转换为时间戳</button>
+        <button id="btn-copy-ts" class="btn-secondary">📋 复制结果</button>
       </div>
 
       <label>结果</label>
@@ -56,11 +76,13 @@
     </div>
 
     <hr/>
+    
     <div class="note">
-      说明：
+      💡 <strong>说明：</strong>
       <ul>
-        <li>时区以“UTC 偏移小时”为单位（支持小数，如 -5.5）。默认 +8（北京时间）。</li>
-        <li>日期解析支持 "YYYY-MM-DD", "YYYY-MM-DD HH:mm", "YYYY-MM-DD HH:mm:ss", "YYYY-MM-DD HH:mm:ss.SSS" 格式。</li>
+        <li>实时时间戳每秒自动更新</li>
+        <li>时区以"UTC 偏移小时"为单位（支持小数，如 -5.5）。默认 +8（北京时间）。</li>
+        <li>使用日期时间选择器可以快速准确地选择日期和时间。</li>
       </ul>
     </div>
   </div>
