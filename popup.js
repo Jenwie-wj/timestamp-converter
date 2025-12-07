@@ -39,9 +39,10 @@
     if(isNaN(date.getTime())) return { ok:false, text:'日期格式无效' };
     
     // The date is already in local time, we need to convert it to the specified timezone
-    // First, get the local timezone offset and calculate UTC
+    // getTimezoneOffset returns offset from UTC to local in minutes
+    // To get UTC: UTC = local - offset (so we subtract the offset)
     const localOffsetMs = date.getTimezoneOffset() * 60000;
-    const utcMs = date.getTime() + localOffsetMs - offsetHours * 3600000;
+    const utcMs = date.getTime() - localOffsetMs - offsetHours * 3600000;
     
     if(outUnit === 's') return { ok:true, value: Math.floor(utcMs/1000) };
     return { ok:true, value: utcMs };
@@ -71,6 +72,18 @@
     return null;
   }
 
+  // Create formatter once for efficiency
+  const beijingTimeFormatter = new Intl.DateTimeFormat('zh-CN', {
+    timeZone: 'Asia/Shanghai',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
+
   // Real-time timestamp update function
   function updateRealtimeTimestamp(){
     const now = Date.now();
@@ -80,17 +93,7 @@
     realtimeTsMs.textContent = now;
     
     // Format current time in Beijing timezone (UTC+8)
-    const formatter = new Intl.DateTimeFormat('zh-CN', {
-      timeZone: 'Asia/Shanghai',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false
-    });
-    const parts = formatter.formatToParts(new Date());
+    const parts = beijingTimeFormatter.formatToParts(new Date());
     const year = parts.find(p => p.type === 'year').value;
     const month = parts.find(p => p.type === 'month').value;
     const day = parts.find(p => p.type === 'day').value;
@@ -102,7 +105,7 @@
 
   // Update realtime timestamp every second
   updateRealtimeTimestamp();
-  setInterval(updateRealtimeTimestamp, 1000);
+  const realtimeInterval = setInterval(updateRealtimeTimestamp, 1000);
 
   btnTsToDate.addEventListener('click', ()=>{
     const val = tsInput.value.trim();
