@@ -1,5 +1,8 @@
 // Popup script for timestamp <-> date converter (offset-based timezones)
 (function(){
+  // Constants
+  const COPY_FEEDBACK_DURATION_MS = 1200;
+  
   // Utils
   function pad(n, width=2){ return String(n).padStart(width,'0'); }
   function padMs(n){ return String(n).padStart(3,'0'); }
@@ -82,10 +85,17 @@
     realtimeTsMs.textContent = now;
     
     // Format current time in Beijing timezone (UTC+8)
-    const date = new Date(now);
-    const beijingTime = new Date(now + 8 * 3600000);
-    const formatted = formatDateFromMs(beijingTime.getTime());
-    currentTimeDisplay.textContent = `北京时间：${formatted.split('.')[0]}`;
+    const beijingTimeStr = new Date().toLocaleString('zh-CN', {
+      timeZone: 'Asia/Shanghai',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    });
+    currentTimeDisplay.textContent = `北京时间：${beijingTimeStr.replace(/\//g, '-')}`;
   }
 
   // Update realtime timestamp every second
@@ -117,7 +127,7 @@
     try{
       await navigator.clipboard.writeText(txt);
       btnCopyDate.textContent = '✓ 已复制';
-      setTimeout(()=>btnCopyDate.textContent='📋 复制结果',1200);
+      setTimeout(()=>btnCopyDate.textContent='📋 复制结果', COPY_FEEDBACK_DURATION_MS);
     }catch(e){ alert('复制失败：' + e); }
   });
 
@@ -127,7 +137,7 @@
     try{
       await navigator.clipboard.writeText(txt);
       btnCopyTs.textContent = '✓ 已复制';
-      setTimeout(()=>btnCopyTs.textContent='📋 复制结果',1200);
+      setTimeout(()=>btnCopyTs.textContent='📋 复制结果', COPY_FEEDBACK_DURATION_MS);
     }catch(e){ alert('复制失败：' + e); }
   });
 
