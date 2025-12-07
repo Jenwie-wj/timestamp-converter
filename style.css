@@ -151,10 +151,6 @@ textarea:focus {
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-input[type="datetime-local"] {
-  cursor: pointer;
-}
-
 textarea {
   height: 64px;
   resize: vertical;

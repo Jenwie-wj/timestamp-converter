@@ -34,19 +34,14 @@
     if(!datetimeValue) return { ok:false, text:'请选择日期和时间' };
     
     // datetime-local format: YYYY-MM-DDTHH:mm or YYYY-MM-DDTHH:mm:ss
+    // The browser interprets this as local time, so we need to adjust for the desired timezone
     const date = new Date(datetimeValue);
     if(isNaN(date.getTime())) return { ok:false, text:'日期格式无效' };
     
-    // Get local time components
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const day = date.getDate();
-    const hour = date.getHours();
-    const minute = date.getMinutes();
-    const second = date.getSeconds();
-    
-    // Compute UTC ms for that wall-clock time in the given timezone
-    const utcMs = Date.UTC(year, month, day, hour, minute, second, 0) - offsetHours * 3600000;
+    // The date is already in local time, we need to convert it to the specified timezone
+    // First, get the local timezone offset and calculate UTC
+    const localOffsetMs = date.getTimezoneOffset() * 60000;
+    const utcMs = date.getTime() + localOffsetMs - offsetHours * 3600000;
     
     if(outUnit === 's') return { ok:true, value: Math.floor(utcMs/1000) };
     return { ok:true, value: utcMs };
@@ -85,7 +80,7 @@
     realtimeTsMs.textContent = now;
     
     // Format current time in Beijing timezone (UTC+8)
-    const beijingTimeStr = new Date().toLocaleString('zh-CN', {
+    const formatter = new Intl.DateTimeFormat('zh-CN', {
       timeZone: 'Asia/Shanghai',
       year: 'numeric',
       month: '2-digit',
@@ -95,7 +90,14 @@
       second: '2-digit',
       hour12: false
     });
-    currentTimeDisplay.textContent = `北京时间：${beijingTimeStr.replace(/\//g, '-')}`;
+    const parts = formatter.formatToParts(new Date());
+    const year = parts.find(p => p.type === 'year').value;
+    const month = parts.find(p => p.type === 'month').value;
+    const day = parts.find(p => p.type === 'day').value;
+    const hour = parts.find(p => p.type === 'hour').value;
+    const minute = parts.find(p => p.type === 'minute').value;
+    const second = parts.find(p => p.type === 'second').value;
+    currentTimeDisplay.textContent = `北京时间：${year}-${month}-${day} ${hour}:${minute}:${second}`;
   }
 
   // Update realtime timestamp every second
