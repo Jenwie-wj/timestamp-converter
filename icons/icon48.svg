@@ -1,31 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" role="img" aria-labelledby="t48">
-  <title id="t48">Timestamp Converter</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 128 128">
+  <title>Timestamp Converter</title>
   <defs>
-    <linearGradient id="g48" x1="0" x2="1" y1="0" y2="1">
-      <stop offset="0" stop-color="#0b74de"/>
-      <stop offset="1" stop-color="#0a9ee8"/>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
     </linearGradient>
+    <filter id="shadow1">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/>
+    </filter>
   </defs>
-
-  <rect x="1.5" y="1.5" width="45" height="45" rx="8" fill="url(#g48)"/>
-
-  <!-- circular arrow -->
-  <g transform="translate(24,24)" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round">
-    <path d="M14 -1 A16 16 0 1 0 -4 -17"/>
-    <path d="M15 -2 L18 1 L12 3 Z" fill="#fff" stroke="none" transform="rotate(18 15 -1)"/>
+  
+  <!-- Background -->
+  <rect width="128" height="128" rx="24" fill="url(#grad1)" filter="url(#shadow1)"/>
+  
+  <!-- Clock circle -->
+  <circle cx="64" cy="64" r="35" fill="#ffffff" opacity="0.95"/>
+  <circle cx="64" cy="64" r="32" fill="none" stroke="#667eea" stroke-width="2"/>
+  
+  <!-- Clock hands showing time -->
+  <line x1="64" y1="64" x2="64" y2="42" stroke="#667eea" stroke-width="3" stroke-linecap="round"/>
+  <line x1="64" y1="64" x2="78" y2="64" stroke="#764ba2" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Conversion arrows -->
+  <g opacity="0.9">
+    <!-- Top arrow pointing right -->
+    <path d="M 25 22 L 55 22" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M 50 18 L 58 22 L 50 26" fill="#ffffff"/>
+    
+    <!-- Bottom arrow pointing left -->
+    <path d="M 103 106 L 73 106" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M 78 102 L 70 106 L 78 110" fill="#ffffff"/>
   </g>
-
-  <!-- small clock -->
-  <g transform="translate(24,24)">
-    <circle r="9" fill="#fff"/>
-    <circle r="8.2" fill="#f6f8fb"/>
-    <line x1="0" y1="0" x2="0" y2="-4.5" stroke="#0b74de" stroke-width="1.6" stroke-linecap="round"/>
-    <line x1="0" y1="0" x2="4" y2="2" stroke="#0b74de" stroke-width="1.2" stroke-linecap="round"/>
-  </g>
-
-  <!-- TS -->
-  <g transform="translate(36,36)">
-    <rect x="-8" y="-5" width="16" height="10" rx="3" fill="#072b5b"/>
-    <text x="0" y="3.3" text-anchor="middle" font-family="Sans-serif" font-weight="700" font-size="7" fill="#fff">TS</text>
-  </g>
+  
+  <!-- Digital display elements -->
+  <rect x="18" y="16" width="8" height="12" rx="1" fill="#ffffff" opacity="0.8"/>
+  <rect x="110" y="100" width="8" height="12" rx="1" fill="#ffffff" opacity="0.8"/>
 </svg>

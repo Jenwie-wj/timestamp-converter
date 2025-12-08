@@ -1,13 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" role="img" aria-labelledby="t16">
-  <title id="t16">TS</title>
-  <rect x="0.5" y="0.5" width="15" height="15" rx="3" fill="#0b74de"/>
-  <!-- simplified clock + arrow -->
-  <g transform="translate(4,4)" stroke="#fff" stroke-width="1" fill="none" stroke-linecap="round">
-    <circle cx="4" cy="4" r="3.2" fill="#fff"/>
-    <circle cx="4" cy="4" r="2.6" fill="#f6f8fb"/>
-    <line x1="4" y1="4" x2="4" y2="2.4" stroke="#0b74de"/>
-    <line x1="4" y1="4" x2="5.2" y2="4.8" stroke="#0b74de"/>
-    <path d="M9.2 1.4 L10.6 2.8" stroke="#fff" stroke-width="1" />
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 128 128">
+  <title>Timestamp Converter</title>
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow1">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="128" height="128" rx="24" fill="url(#grad1)" filter="url(#shadow1)"/>
+  
+  <!-- Clock circle -->
+  <circle cx="64" cy="64" r="35" fill="#ffffff" opacity="0.95"/>
+  <circle cx="64" cy="64" r="32" fill="none" stroke="#667eea" stroke-width="2"/>
+  
+  <!-- Clock hands showing time -->
+  <line x1="64" y1="64" x2="64" y2="42" stroke="#667eea" stroke-width="3" stroke-linecap="round"/>
+  <line x1="64" y1="64" x2="78" y2="64" stroke="#764ba2" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Conversion arrows -->
+  <g opacity="0.9">
+    <!-- Top arrow pointing right -->
+    <path d="M 25 22 L 55 22" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M 50 18 L 58 22 L 50 26" fill="#ffffff"/>
+    
+    <!-- Bottom arrow pointing left -->
+    <path d="M 103 106 L 73 106" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M 78 102 L 70 106 L 78 110" fill="#ffffff"/>
   </g>
-  <text x="12" y="12" font-family="Sans-serif" font-size="6" font-weight="700" fill="#fff" text-anchor="end">TS</text>
+  
+  <!-- Digital display elements -->
+  <rect x="18" y="16" width="8" height="12" rx="1" fill="#ffffff" opacity="0.8"/>
+  <rect x="110" y="100" width="8" height="12" rx="1" fill="#ffffff" opacity="0.8"/>
 </svg>
